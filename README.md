@@ -10,6 +10,15 @@ The project is based on a small web service which uses the following technologie
 * Database H2 (In-Memory)
 * Maven
 
+{
+
+	- Env setup and able to run the service locally at the port 
+	
+	- Werid thing, hibernate is throwing error at entity constructor for java 11( check this)
+
+}
+	
+
 
 You should be aware of the following conventions while you are working on this exercise:
 
@@ -41,6 +50,17 @@ _NOTE: Please DO NOT publish the project, e.g. by uploading it to GitHub or the 
  * Extend the DriverDo to map the selected car to the driver.
  * Add example data to resources/data.sql
 
+{
+	Branch : feature_task#1
+		- feature_cars_models
+		- feature_cars_curd
+		- feature_driverSelectCar
+		- feature_driverDeselectCar
+		- feature_driverDOupgrade
+	
+
+	** implement the curd using restful data module rather than the n-tire architecutre
+}
 ---
 
 
