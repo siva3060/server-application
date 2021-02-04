@@ -1,4 +1,114 @@
 package com.freenow.datatransferobject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.freenow.domainvalue.EngineType;
+import com.freenow.domainvalue.GeoCoordinate;
+import com.freenow.domainvalue.Manufacturer;
+
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CarDTO {
+
+    @JsonIgnore
+    private Long id;
+
+    @NotNull(message = "license plate can not be null!")
+    private String licensePlate;
+
+    @NotNull(message = "seat count  can not be null!")
+    private int seatCount;
+
+    private Boolean isConvertible = false;
+
+    private double rating;
+
+    private EngineType engineType;
+
+    @NotNull(message = "Manufacture data can not be null!")
+    private Manufacturer manufacturer;
+
+
+    @JsonProperty(value = "isConvertible")
+    public void setConvertible(Boolean convertible) {
+        isConvertible = convertible;
+    }
+
+    public static CarDTOBuilder newBuilder() {
+        return new CarDTOBuilder();
+    }
+
+    @JsonProperty
+    public Long getId()
+    {
+        return id;
+    }
+    private CarDTO()
+    {
+    }
+
+    public CarDTO(Long id, @NotNull(message = "license plate can not be null!") String licensePlate, @NotNull(message = "seat count  can not be null!") int seatCount, Boolean isConvertible, double rating, EngineType engineType, Manufacturer manufacturer) {
+        this.id = id;
+        this.licensePlate = licensePlate;
+        this.seatCount = seatCount;
+        this.isConvertible = isConvertible;
+        this.rating = rating;
+        this.engineType = engineType;
+        this.manufacturer = manufacturer;
+    }
+
+    public static class CarDTOBuilder{
+
+        private Long id;
+        private String licensePlate;
+        private int seatCount;
+        private Boolean isConvertible = false;
+        private double rating;
+        private EngineType engineType;
+        private Manufacturer manufacturer;
+
+        public CarDTOBuilder getId() {
+            this.id = id;
+            return this;
+        }
+
+        public CarDTOBuilder getLicensePlate() {
+            this.licensePlate = licensePlate;
+            return this;
+        }
+
+        public CarDTOBuilder getSeatCount() {
+            this.seatCount =  seatCount;
+            return this;
+        }
+
+        public CarDTOBuilder getConvertible() {
+            this.isConvertible =  isConvertible;
+            return this;
+        }
+
+        public CarDTOBuilder getRating() {
+            this.rating =  rating;
+            return this;
+        }
+
+        public CarDTOBuilder getEngineType() {
+            this.engineType =  engineType;
+            return this;
+        }
+
+        public CarDTOBuilder getManufacturer() {
+             this.manufacturer = manufacturer;
+             return this;
+        }
+        public CarDTO createCarDTO()
+        {
+            return new CarDTO(id,licensePlate,seatCount,isConvertible,rating,engineType,manufacturer);
+        }
+    }
 }
