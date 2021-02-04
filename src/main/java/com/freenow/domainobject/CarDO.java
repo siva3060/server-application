@@ -19,10 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @Entity
-@Table(
-    name = "Car",
-    uniqueConstraints = @UniqueConstraint(name = "uc_licenseplate", columnNames = {"licenseplate"})
-)
+@Table(name = "Car")
 public class CarDO {
 
     @Id
@@ -41,15 +38,15 @@ public class CarDO {
     private int seatCount;
 
     @Column(nullable = false)
-    private Boolean convertable = false;
+    private Boolean isConvertible = false;
 
     @Column(nullable = false)
     private double rating;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private EngineType engineType;
 
-    @Embedded
     private Manufacturer manufacturer;
 
 }
