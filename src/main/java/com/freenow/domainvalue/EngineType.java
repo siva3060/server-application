@@ -1,4 +1,4 @@
-package com.freenow.domainobject;
+package com.freenow.domainvalue;
 
 public enum EngineType{
 	ELECTRIC, GAS, HYBRID

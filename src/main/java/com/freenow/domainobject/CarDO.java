@@ -3,7 +3,6 @@ package com.freenow.domainobject;
 
 import java.time.ZonedDateTime;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,9 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
+import com.freenow.domainvalue.EngineType;
+import com.freenow.domainvalue.Manufacturer;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
