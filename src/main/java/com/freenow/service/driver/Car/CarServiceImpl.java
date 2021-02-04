@@ -1,7 +1,6 @@
 package com.freenow.service.driver.Car;
 
 import com.freenow.dataaccessobject.CarRepository;
-import com.freenow.datatransferobject.CarDTO;
 import com.freenow.domainobject.CarDO;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,20 +12,28 @@ public class CarServiceImpl implements CarService{
     CarRepository carRepository;
 
     @Override
-    public void saveCar(CarDTO carDto) {
-        CarDO carDO = CarDoFactory(carDto);
-        carRepository.save(carDO);
-
+    public CarDO saveCar(CarDO carDO) {
+        return carRepository.save(carDO);
     }
 
+    public CarDO getCarById(Long carId){
+       Optional<CarDO> carDO = carRepository.findById(carId);
+       if(carDO.isPresent()){
+           return carDO.get();
+       }
+       return null;
+    }
     @Override
-    public void updateCar(Long carId, CarDTO carDto) {
+    public CarDO updateCar(Long carId, CarDO newCarDo) {
+        Optional<CarDO> carDO = carRepository.findById(carId);
+        if(carDO.isPresent()){
+            CarDO oldCarDo = carDO.get();
+            newCarDo.setId(oldCarDo.getId());
+            carRepository.save(newCarDo);
+        }
+        return null;
     }
 
-    @Override
-    public Optional<CarDO> getCar(Long carId) {
-        return carRepository.findById(carId);
-    }
 
     @Override
     public void deleteCar(Long carId) {

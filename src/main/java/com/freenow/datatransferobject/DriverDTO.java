@@ -20,6 +20,12 @@ public class DriverDTO
 
     private GeoCoordinate coordinate;
 
+    @JsonProperty
+    public Long getId()
+    {
+        return id;
+    }
+
 
     private DriverDTO()
     {
@@ -40,12 +46,6 @@ public class DriverDTO
         return new DriverDTOBuilder();
     }
 
-
-    @JsonProperty
-    public Long getId()
-    {
-        return id;
-    }
 
 
     public String getUsername()

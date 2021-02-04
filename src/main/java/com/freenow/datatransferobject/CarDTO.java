@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.freenow.domainvalue.EngineType;
 import com.freenow.domainvalue.GeoCoordinate;
 import com.freenow.domainvalue.Manufacturer;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CarDTO {
 
@@ -34,6 +36,12 @@ public class CarDTO {
     private Manufacturer manufacturer;
 
 
+    @JsonProperty
+    public Long getId()
+    {
+        return id;
+    }
+
     @JsonProperty(value = "isConvertible")
     public void setConvertible(Boolean convertible) {
         isConvertible = convertible;
@@ -43,16 +51,13 @@ public class CarDTO {
         return new CarDTOBuilder();
     }
 
-    @JsonProperty
-    public Long getId()
-    {
-        return id;
-    }
     private CarDTO()
     {
     }
 
-    public CarDTO(Long id, @NotNull(message = "license plate can not be null!") String licensePlate, @NotNull(message = "seat count  can not be null!") int seatCount, Boolean isConvertible, double rating, EngineType engineType, Manufacturer manufacturer) {
+    public CarDTO(Long id,String licensePlate, int seatCount,
+                  Boolean isConvertible, double rating,
+                  EngineType engineType, Manufacturer manufacturer) {
         this.id = id;
         this.licensePlate = licensePlate;
         this.seatCount = seatCount;

@@ -35,12 +35,14 @@ public class CarDO {
     private String licensePlate;
 
     @Column(nullable = false)
+    @NotNull(message = "Seat count cannot be null")
     private int seatCount;
 
     @Column(nullable = false)
     private Boolean isConvertible = false;
 
     @Column(nullable = false)
+    @NotNull(message = "Rating cannot be null")
     private double rating;
 
     @Column(nullable = false)
@@ -50,4 +52,19 @@ public class CarDO {
     @Column(nullable = false)
     private Manufacturer manufacturer;
 
+    public CarDO() {
+
+    }
+
+    public CarDO( String licensePlate, int seatCount,
+                 Boolean isConvertible, double rating,
+                  EngineType engineType, Manufacturer manufacturer) {
+        this.dateCreated = dateCreated;
+        this.licensePlate = licensePlate;
+        this.seatCount = seatCount;
+        this.isConvertible = isConvertible;
+        this.rating = rating;
+        this.engineType = engineType;
+        this.manufacturer = manufacturer;
+    }
 }
