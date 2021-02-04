@@ -44,6 +44,16 @@ public class DriverDO
     @Column(nullable = false)
     private Boolean deleted = false;
 
+    private long carSelected;
+
+    public long getCarSelected() {
+        return carSelected;
+    }
+
+    public void setCarSelected(long carSelected) {
+        this.carSelected = carSelected;
+    }
+
     @Embedded
     private GeoCoordinate coordinate;
 

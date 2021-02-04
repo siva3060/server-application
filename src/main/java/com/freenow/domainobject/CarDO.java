@@ -38,7 +38,6 @@ public class CarDO {
     @NotNull(message = "Seat count cannot be null")
     private int seatCount;
 
-    @Column(nullable = false)
     private Boolean isConvertible = false;
 
     @Column(nullable = false)
@@ -51,6 +50,9 @@ public class CarDO {
 
     @Column(nullable = false)
     private Manufacturer manufacturer;
+
+    private boolean isAvaliable = true;
+    private Long bookedBy;
 
     public CarDO() {
 
@@ -66,5 +68,9 @@ public class CarDO {
         this.rating = rating;
         this.engineType = engineType;
         this.manufacturer = manufacturer;
+    }
+
+    public void setIsAvaliable(boolean b) {
+        this.isAvaliable = b;
     }
 }

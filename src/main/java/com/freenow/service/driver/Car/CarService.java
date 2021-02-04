@@ -12,4 +12,9 @@ public interface   CarService {
     void deleteCar(Long carId);
 
     CarDO getCarById(Long carId);
+
+
+    CarDO selectCar(Long driverId, Long carId);
+
+    CarDO deSelectCar(Long driverId, Long carId);
 }

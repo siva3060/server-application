@@ -1,11 +1,14 @@
 package com.freenow.controller;
 
+import com.freenow.controller.mapper.CarMapper;
 import com.freenow.controller.mapper.DriverMapper;
+import com.freenow.datatransferobject.CarDTO;
 import com.freenow.datatransferobject.DriverDTO;
 import com.freenow.domainobject.DriverDO;
 import com.freenow.domainvalue.OnlineStatus;
 import com.freenow.exception.ConstraintsViolationException;
 import com.freenow.exception.EntityNotFoundException;
+import com.freenow.service.driver.Car.CarService;
 import com.freenow.service.driver.DriverService;
 import java.util.List;
 import javax.validation.Valid;
@@ -32,11 +35,13 @@ public class DriverController
 {
 
     private final DriverService driverService;
+    private final CarService carService;
 
 
     @Autowired
-    public DriverController(final DriverService driverService){
+    public DriverController(final DriverService driverService,final CarService carService){
         this.driverService = driverService;
+        this.carService = carService;
     }
 
 
@@ -76,5 +81,14 @@ public class DriverController
     public List<DriverDTO> findDrivers(@RequestParam OnlineStatus onlineStatus)
     {
         return DriverMapper.makeDriverDTOList(driverService.find(onlineStatus));
+    }
+
+    @GetMapping("/select/{carId}/{driverId}")
+    public CarDTO selectCarById(@PathVariable Long driverId,Long carId){
+            return CarMapper.makeCarDTO(carService.selectCar(driverId,carId));
+    }
+    @GetMapping("/deselect/{carId}/{driverId}")
+    public CarDTO deSelectCarById(@PathVariable Long driverId,Long carId){
+        return CarMapper.makeCarDTO(carService.selectCar(driverId,carId));
     }
 }
