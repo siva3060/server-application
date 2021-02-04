@@ -16,6 +16,11 @@ public class CarController {
     @Autowired
     CarService carService;
 
+    @GetMapping("/healthcheck")
+    public String healthCheck(){
+        return "KEEP_ALIVE_OK";
+    }
+
     @PostMapping("/addcar")
     public CarDTO addCar(CarDTO carDto){
         CarDO carDO = CarMapper.makeCarDo(carDto);
@@ -28,13 +33,13 @@ public class CarController {
         return CarMapper.makeCarDTO(carService.updateCar(carId,carDO));
     }
 
-    @GetMapping("/{carId}")
+    @GetMapping("/getCar/{carId}")
     public CarDTO getCar(@PathVariable(value ="carId" ) Long carId){
 
         return CarMapper.makeCarDTO(carService.getCarById(carId));
     }
 
-    @DeleteMapping("/{carId}")
+    @DeleteMapping("/delete/{carId}")
     public void  deleteCar(@PathVariable(value ="carId" ) Long carId){
         carService.deleteCar(carId);
     }
