@@ -47,6 +47,7 @@ public class CarDO {
     @Enumerated(EnumType.STRING)
     private EngineType engineType;
 
+    @Column(nullable = false)
     private Manufacturer manufacturer;
 
 }
