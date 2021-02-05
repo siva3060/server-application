@@ -18,6 +18,5 @@ public interface DriverRepository extends CrudRepository<DriverDO, Long>
 
         List<DriverDO> findByOnlineStatus(OnlineStatus onlineStatus);
 
-        @Query("Select * from driver where keyWord = value")
-        List<DriverDO> findBy(@Param("keyWord") String value);
+        //List<DriverDO> findBy(@Param("keyWord") String value);
 }

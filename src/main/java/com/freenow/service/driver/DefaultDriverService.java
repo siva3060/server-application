@@ -6,6 +6,7 @@ import com.freenow.domainobject.DriverDO;
 import com.freenow.domainvalue.GeoCoordinate;
 import com.freenow.domainvalue.OnlineStatus;
 import com.freenow.exception.ConstraintsViolationException;
+import com.freenow.exception.DriverNotFound;
 import com.freenow.exception.EntityNotFoundException;
 import java.util.List;
 import org.slf4j.Logger;
@@ -116,17 +117,19 @@ public class DefaultDriverService implements DriverService
     }
 
  // need to implement criteria Queries
+/*
     @Override
     public List<DriverDO> searchBy(String keyWord, String value) {
         //return driverRepository.findBy(String value);
         return null;
     }
+*/
 
 
-    private DriverDO findDriverChecked(Long driverId) throws EntityNotFoundException
+    private DriverDO findDriverChecked(Long driverId) throws DriverNotFound
     {
         return driverRepository.findById(driverId)
-            .orElseThrow(() -> new EntityNotFoundException("Could not find entity with id: " + driverId));
+            .orElseThrow(() -> new DriverNotFound("Could not find entity with id: " + driverId));
     }
 
 

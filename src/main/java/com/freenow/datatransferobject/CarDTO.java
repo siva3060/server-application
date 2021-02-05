@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.freenow.domainvalue.EngineType;
-import com.freenow.domainvalue.GeoCoordinate;
 import com.freenow.domainvalue.Manufacturer;
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -21,15 +21,20 @@ public class CarDTO {
     private Long id;
 
     @NotNull(message = "license plate can not be null!")
+    @Size(min=5,max=8,message = "licensePlate should be atlest 5 digits")
     private String licensePlate;
 
     @NotNull(message = "seat count  can not be null!")
+    @Range(min = 2,max=8,message = "seat count should be in the range 2 - 10")
     private int seatCount;
 
     private Boolean isConvertible = false;
 
+    @NotNull
+    @DecimalMax(value = "5.0",message = "rating cannot be more that 5.0")
     private double rating;
 
+    @NotNull
     private EngineType engineType;
 
     @NotNull(message = "Manufacture data can not be null!")

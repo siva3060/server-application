@@ -3,11 +3,16 @@ package com.freenow.controller;
 import com.freenow.controller.mapper.CarMapper;
 import com.freenow.datatransferobject.CarDTO;
 import com.freenow.domainobject.CarDO;
+import com.freenow.exception.CarNotFoundException;
+import com.freenow.exception.EntityNotFoundException;
 import com.freenow.service.Car.CarService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -25,11 +30,17 @@ public class CarController {
         return "KEEP_ALIVE_OK";
     }
 
+    //curl http://localhost:8080/v1/cars/create -d '{ "id" : 2, "licensePlate" : "AU34AD2", "seatCount" : 4,"isConvertiable" : true, "rating": 4.5, "manufacturer" : { "make" : "KIA", "model" : "Optioma"} '
     @PostMapping("/addcar")
-    public CarDTO addCar(CarDTO carDto){
-        log.info("Request for  a new car with number plate "+carDto.getLicensePlate());
+    public ResponseEntity<CarDTO> addCar(@Valid @RequestBody CarDTO carDto)  {
+        log.info("Request for  a new car with license plate "+carDto.getLicensePlate());
         CarDO carDO = CarMapper.makeCarDo(carDto);
-        return CarMapper.makeCarDTO(carService.saveCar(carDO));
+        return new ResponseEntity<>(CarMapper.makeCarDTO(carService.saveCar(carDO)), HttpStatus.CREATED);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public void handleConstrainVoildationException(){
+
     }
 
     @PostMapping("/updatecar/{carId}")
@@ -40,7 +51,7 @@ public class CarController {
     }
 
     @GetMapping("/getCar/{carId}")
-    public CarDTO getCar(@PathVariable(value ="carId" ) Long carId){
+    public CarDTO getCar(@PathVariable(value ="carId" ) Long carId) throws CarNotFoundException {
         log.info("Requesting car "+carId);
         return CarMapper.makeCarDTO(carService.getCarById(carId));
     }

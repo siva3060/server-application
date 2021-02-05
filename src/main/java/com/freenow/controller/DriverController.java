@@ -76,12 +76,14 @@ public class DriverController
     {
         driverService.updateLocation(driverId, longitude, latitude);
     }
+/*
 
     @GetMapping("/searchBy/{keyWord}/{value}")
     public List<DriverDTO> searchDriverBy(@PathVariable String keyWord,
                                           @PathVariable String value){
         return DriverMapper.makeDriverDTOList(driverService.searchBy(keyWord,value));
     }
+*/
 
     @GetMapping
     public List<DriverDTO> findDrivers(@RequestParam OnlineStatus onlineStatus)

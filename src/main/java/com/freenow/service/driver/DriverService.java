@@ -20,5 +20,5 @@ public interface DriverService
 
     List<DriverDO> find(OnlineStatus onlineStatus);
 
-    List<DriverDO> searchBy(String keyWord,String value);
+    //List<DriverDO> searchBy(String keyWord,String value);
 }

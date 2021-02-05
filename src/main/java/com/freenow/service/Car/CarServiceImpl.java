@@ -5,6 +5,9 @@ import com.freenow.dataaccessobject.DriverRepository;
 import com.freenow.domainobject.CarDO;
 import com.freenow.domainobject.DriverDO;
 import com.freenow.exception.CarAlreadyInUseException;
+import com.freenow.exception.CarNotFoundException;
+import com.freenow.exception.DriverNotFound;
+import com.freenow.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,40 +29,31 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public CarDO saveCar(CarDO carDO) {
-        log.info("saving car to repository with ID "+carDO.getId()+" and license plate "+carDO.getLicensePlate());
+        log.info("saving car to repository with license plate "+carDO.getLicensePlate());
         return carRepository.save(carDO);
     }
 
-    public CarDO getCarById(Long carId){
-       Optional<CarDO> carDO = carRepository.findById(carId);
-       if(carDO.isPresent()){
-           log.info("car exist with carId "+carId+" and license plate "+carDO.get().getLicensePlate());
-           return carDO.get();
-       }
-       log.info("No car exist with carId "+carId);
-       return null;
+    public CarDO getCarById(Long carId) throws CarNotFoundException {
+       return carRepository.findById(carId).orElseThrow(()->new CarNotFoundException("No Car Found With ID"+carId));
     }
 
     @Override
-    public CarDO selectCar(Long driverId, Long carId) throws CarAlreadyInUseException {
-        Optional<CarDO> carDO = carRepository.findById(carId);
-        Optional<DriverDO> driverDO = driverRepository.findById(driverId);
+    public CarDO selectCar(Long driverId, Long carId) throws CarAlreadyInUseException,DriverNotFound,CarNotFoundException {
+        DriverDO currentDriver = driverRepository.findById(driverId).
+                orElseThrow(()->new DriverNotFound("No Driver Found With ID"+driverId));
+        CarDO selectedCar = carRepository.findById(carId).
+                orElseThrow(()->new CarNotFoundException("No Car Found With ID"+carId));
+        log.info("Booking car "+selectedCar.getId()+"for driver "+currentDriver.getId());
+        return bookCar(currentDriver,selectedCar);
+    }
 
-        if(carDO.isPresent() && driverDO.isPresent()){
-             CarDO selectedCar = carDO.get();
-             DriverDO currentDriver = driverDO.get();
-             if(selectedCar.getIsAvaliable() == false && currentDriver.getOnlineStatus().equals(true)) {
-                 selectedCar.setBookedBy(driverId);
-                 selectedCar.setIsAvaliable(false);
-                 currentDriver.setCarSelected(true);
-                 currentDriver.setCarId(carId);
-                 log.info(" Driver with ID " + currentDriver.getId() + " has booked car with Id" + selectedCar.getId());
-                 return selectedCar;
-             }
-             throw new CarAlreadyInUseException("Car Already In Use");
-        }
-        log.info(" Diver "+ driverDO.get().getId()+ " not able to select car "+carDO.get().getId());
-        return null;
+    private CarDO bookCar(DriverDO currentDriver,CarDO selectedCar){
+        selectedCar.setBookedBy(currentDriver.getId());
+        selectedCar.setIsAvaliable(false);
+        currentDriver.setCarSelected(true);
+        currentDriver.setCarId(selectedCar.getId());
+        log.info(" Driver with ID " + currentDriver.getId() + " has booked car with Id" + selectedCar.getId());
+        return selectedCar;
     }
 
     @Override
