@@ -4,6 +4,7 @@ import com.freenow.dataaccessobject.CarRepository;
 import com.freenow.dataaccessobject.DriverRepository;
 import com.freenow.domainobject.CarDO;
 import com.freenow.domainobject.DriverDO;
+import com.freenow.exception.CarAlreadyInUseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,14 +48,15 @@ public class CarServiceImpl implements CarService{
         if(carDO.isPresent() && driverDO.isPresent()){
              CarDO selectedCar = carDO.get();
              DriverDO currentDriver = driverDO.get();
-
-             selectedCar.setBookedBy(driverId);
-             selectedCar.setIsAvaliable(false);
-
-             currentDriver.setCarSelected(true);
-             currentDriver.setCarId(carId);
-             log.info(" Driver with ID "+currentDriver.getId()+ " has booked car with Id"+selectedCar.getId());
-             return selectedCar;
+             if(selectedCar.getIsAvaliable() == false) {
+                 selectedCar.setBookedBy(driverId);
+                 selectedCar.setIsAvaliable(false);
+                 currentDriver.setCarSelected(true);
+                 currentDriver.setCarId(carId);
+                 log.info(" Driver with ID " + currentDriver.getId() + " has booked car with Id" + selectedCar.getId());
+                 return selectedCar;
+             }
+             throw new CarAlreadyInUseException();
         }
         log.info(" Diver "+ driverDO.get().getId()+ " not able to select car "+carDO.get().getId());
         return null;

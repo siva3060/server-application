@@ -17,6 +17,8 @@ import com.freenow.domainvalue.Manufacturer;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import static com.freenow.domainobject.DriverDO.NONE;
+
 @Data
 @Entity
 @Table(name = "Car")
@@ -68,9 +70,15 @@ public class CarDO {
         this.rating = rating;
         this.engineType = engineType;
         this.manufacturer = manufacturer;
+        this.isAvaliable = true;
+        this.bookedBy = NONE;
     }
 
     public void setIsAvaliable(boolean b) {
         this.isAvaliable = b;
+    }
+
+    public boolean getIsAvaliable(){
+        return isAvaliable;
     }
 }
