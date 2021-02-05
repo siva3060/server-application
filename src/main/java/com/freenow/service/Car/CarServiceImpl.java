@@ -1,13 +1,15 @@
-package com.freenow.service.driver.Car;
+package com.freenow.service.Car;
 
 import com.freenow.dataaccessobject.CarRepository;
 import com.freenow.dataaccessobject.DriverRepository;
 import com.freenow.domainobject.CarDO;
 import com.freenow.domainobject.DriverDO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class CarServiceImpl implements CarService{
 
     private static final Long NONE = 0L;
@@ -43,7 +45,8 @@ public class CarServiceImpl implements CarService{
              selectedCar.setBookedBy(driverId);
              selectedCar.setIsAvaliable(false);
 
-             currentDriver.setCarSelected(carId);
+             currentDriver.setCarSelected(true);
+             currentDriver.setCarId(carId);
         }
         return null;
     }
@@ -58,7 +61,8 @@ public class CarServiceImpl implements CarService{
             DriverDO currentDriver = driverDO.get();
             selectedCar.setBookedBy(NONE);
             selectedCar.setIsAvaliable(true);
-            currentDriver.setCarSelected(NONE);
+            currentDriver.setCarSelected(false);
+            currentDriver.setCarId(DriverDO.NONE);
         }
         return null;
     }

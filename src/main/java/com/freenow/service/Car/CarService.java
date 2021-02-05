@@ -1,4 +1,4 @@
-package com.freenow.service.driver.Car;
+package com.freenow.service.Car;
 
 import com.freenow.domainobject.CarDO;
 

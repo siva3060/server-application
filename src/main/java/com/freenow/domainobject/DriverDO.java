@@ -24,6 +24,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 )
 public class DriverDO
 {
+    public static final Long NONE = 0L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,14 +45,26 @@ public class DriverDO
     @Column(nullable = false)
     private Boolean deleted = false;
 
-    private long carSelected;
+    @Column(nullable = false,name = "car_selected")
+    private boolean carSelected = false;
 
-    public long getCarSelected() {
+    @Column(nullable = false,name = "CAR_ID")
+    private Long carId = NONE;
+
+    public boolean isCarSelected() {
         return carSelected;
     }
 
-    public void setCarSelected(long carSelected) {
+    public void setCarSelected(boolean carSelected) {
         this.carSelected = carSelected;
+    }
+
+    public Long getCarId() {
+        return carId;
+    }
+
+    public void setCarId(Long carId) {
+        this.carId = carId;
     }
 
     @Embedded
@@ -79,6 +92,8 @@ public class DriverDO
         this.coordinate = null;
         this.dateCoordinateUpdated = null;
         this.onlineStatus = OnlineStatus.OFFLINE;
+        this.carId = NONE;
+        this.carSelected = false;
     }
 
 

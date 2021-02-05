@@ -8,7 +8,7 @@ import com.freenow.domainobject.DriverDO;
 import com.freenow.domainvalue.OnlineStatus;
 import com.freenow.exception.ConstraintsViolationException;
 import com.freenow.exception.EntityNotFoundException;
-import com.freenow.service.driver.Car.CarService;
+import com.freenow.service.Car.CarService;
 import com.freenow.service.driver.DriverService;
 import java.util.List;
 import javax.validation.Valid;

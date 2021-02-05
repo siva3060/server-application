@@ -3,7 +3,7 @@ package com.freenow.controller;
 import com.freenow.controller.mapper.CarMapper;
 import com.freenow.datatransferobject.CarDTO;
 import com.freenow.domainobject.CarDO;
-import com.freenow.service.driver.Car.CarService;
+import com.freenow.service.Car.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
