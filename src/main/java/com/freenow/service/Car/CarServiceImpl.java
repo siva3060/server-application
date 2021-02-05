@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -77,6 +78,13 @@ public class CarServiceImpl implements CarService{
         log.info(" Diver "+ driverDO.get().getId()+ " not able to deselect car "+carDO.get().getId());
         return null;
     }
+
+    @Override
+    public List<CarDO> getAllCars() {
+        log.info("Fetching all the cars in the database ");
+        return carRepository.findAll();
+    }
+
     @Override
     public CarDO updateCar(Long carId, CarDO newCarDo) {
         Optional<CarDO> carDO = carRepository.findById(carId);
@@ -87,6 +95,7 @@ public class CarServiceImpl implements CarService{
             log.info("A car "+ carId+" details has been updated");
             return newCarDo;
         }
+        log.info("No car found with ID "+carId);
         return null;
     }
 

@@ -2,6 +2,8 @@ package com.freenow.service.Car;
 
 import com.freenow.domainobject.CarDO;
 
+import java.util.List;
+
 public interface   CarService {
 
     CarDO saveCar(CarDO carDo);
@@ -17,4 +19,6 @@ public interface   CarService {
     CarDO selectCar(Long driverId, Long carId);
 
     CarDO deSelectCar(Long driverId, Long carId);
+
+    List<CarDO> getAllCars();
 }

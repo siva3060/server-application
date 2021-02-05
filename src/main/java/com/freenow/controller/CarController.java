@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -48,5 +49,11 @@ public class CarController {
     public void  deleteCar(@PathVariable(value ="carId" ) Long carId){
         log.info("Requesting to delete car "+ carId);
         carService.deleteCar(carId);
+    }
+
+    @GetMapping
+    public List<CarDO> getAllCars(){
+       log.info("Requesting all cars ");
+       return carService.getAllCars();
     }
 }
