@@ -1,18 +1,15 @@
 package com.freenow.controller.mapper;
 
-        import com.freenow.datatransferobject.CarDTO;
-        import com.freenow.datatransferobject.DriverDTO;
-        import com.freenow.domainobject.CarDO;
-        import com.freenow.domainobject.DriverDO;
-        import com.freenow.domainvalue.GeoCoordinate;
-        import java.util.Collection;
-        import java.util.List;
-        import java.util.stream.Collectors;
+import com.freenow.datatransferobject.CarDTO;
+import com.freenow.domainobject.CarDO;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CarMapper
 {
 
         public static CarDO makeCarDo(CarDTO carDTO){
+            log.info("Transforming car DTO -> car DO for car license plate "+carDTO.getLicensePlate());
               return new CarDO(carDTO.getLicensePlate(),
                       carDTO.getSeatCount(),
                       carDTO.getIsConvertible(),
@@ -22,6 +19,7 @@ public class CarMapper
         }
 
         public static CarDTO makeCarDTO(CarDO carDO){
+            log.info("Transforming car DO -> car DTO for car license plate "+ carDO.getLicensePlate());
                 return new CarDTO(carDO.getId(),
                         carDO.getLicensePlate(),
                         carDO.getSeatCount(),
