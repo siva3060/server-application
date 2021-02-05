@@ -1,5 +1,6 @@
 package com.freenow.service.driver;
 
+import com.freenow.datatransferobject.DriverDTO;
 import com.freenow.domainobject.DriverDO;
 import com.freenow.domainvalue.OnlineStatus;
 import com.freenow.exception.ConstraintsViolationException;
@@ -19,4 +20,5 @@ public interface DriverService
 
     List<DriverDO> find(OnlineStatus onlineStatus);
 
+    List<DriverDO> searchBy(String keyWord,String value);
 }

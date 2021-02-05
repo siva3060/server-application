@@ -41,14 +41,14 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
-    public CarDO selectCar(Long driverId, Long carId) {
+    public CarDO selectCar(Long driverId, Long carId) throws CarAlreadyInUseException {
         Optional<CarDO> carDO = carRepository.findById(carId);
         Optional<DriverDO> driverDO = driverRepository.findById(driverId);
 
         if(carDO.isPresent() && driverDO.isPresent()){
              CarDO selectedCar = carDO.get();
              DriverDO currentDriver = driverDO.get();
-             if(selectedCar.getIsAvaliable() == false) {
+             if(selectedCar.getIsAvaliable() == false && currentDriver.getOnlineStatus().equals(true)) {
                  selectedCar.setBookedBy(driverId);
                  selectedCar.setIsAvaliable(false);
                  currentDriver.setCarSelected(true);
@@ -56,7 +56,7 @@ public class CarServiceImpl implements CarService{
                  log.info(" Driver with ID " + currentDriver.getId() + " has booked car with Id" + selectedCar.getId());
                  return selectedCar;
              }
-             throw new CarAlreadyInUseException();
+             throw new CarAlreadyInUseException("Car Already In Use");
         }
         log.info(" Diver "+ driverDO.get().getId()+ " not able to select car "+carDO.get().getId());
         return null;

@@ -6,6 +6,7 @@ import com.freenow.datatransferobject.CarDTO;
 import com.freenow.datatransferobject.DriverDTO;
 import com.freenow.domainobject.DriverDO;
 import com.freenow.domainvalue.OnlineStatus;
+import com.freenow.exception.CarAlreadyInUseException;
 import com.freenow.exception.ConstraintsViolationException;
 import com.freenow.exception.EntityNotFoundException;
 import com.freenow.service.Car.CarService;
@@ -76,6 +77,11 @@ public class DriverController
         driverService.updateLocation(driverId, longitude, latitude);
     }
 
+    @GetMapping("/searchBy/{keyWord}/{value}")
+    public List<DriverDTO> searchDriverBy(@PathVariable String keyWord,
+                                          @PathVariable String value){
+        return DriverMapper.makeDriverDTOList(driverService.searchBy(keyWord,value));
+    }
 
     @GetMapping
     public List<DriverDTO> findDrivers(@RequestParam OnlineStatus onlineStatus)
@@ -84,11 +90,11 @@ public class DriverController
     }
 
     @GetMapping("/select/{carId}/{driverId}")
-    public CarDTO selectCarById(@PathVariable Long driverId,Long carId){
+    public CarDTO selectCarById(@PathVariable Long driverId,Long carId) throws CarAlreadyInUseException {
             return CarMapper.makeCarDTO(carService.selectCar(driverId,carId));
     }
     @GetMapping("/deselect/{carId}/{driverId}")
-    public CarDTO deSelectCarById(@PathVariable Long driverId,Long carId){
+    public CarDTO deSelectCarById(@PathVariable Long driverId,Long carId) throws CarAlreadyInUseException {
         return CarMapper.makeCarDTO(carService.selectCar(driverId,carId));
     }
 }
