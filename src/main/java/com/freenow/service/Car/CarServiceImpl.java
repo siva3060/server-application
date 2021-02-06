@@ -9,19 +9,18 @@ import com.freenow.domainobject.DriverDO;
 import com.freenow.exception.CarAlreadyInUseException;
 import com.freenow.exception.CarNotFoundException;
 import com.freenow.exception.DriverNotFound;
-import com.freenow.exception.EntityNotFoundException;
+import com.freenow.service.booking.BookingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
 public class CarServiceImpl implements CarService{
 
-    private static final Long NONE = 0L;
+
     
     @Autowired
     CarRepository carRepository;
@@ -29,31 +28,63 @@ public class CarServiceImpl implements CarService{
     @Autowired
     DriverRepository driverRepository;
 
-    public CarDO getCarById(Long carId) throws CarNotFoundException {
-        return carRepository.findById(carId).orElseThrow(()->new CarNotFoundException("No Car Found With ID"+carId));
+    @Autowired
+    BookingService bookingService;
+
+
+    @Override
+    public CarDTO getCar(Long carId) throws CarNotFoundException {
+        CarDO CarDO =  carRepository.findById(carId).orElseThrow(()->new CarNotFoundException("No Car Found With ID"+carId));
+        return CarMapper.makeCarDTO(CarDO);
     }
+
+    @Override
     public CarDTO processCarCreateRequest(CarDTO carDto) {
         CarDO carDO = CarMapper.makeCarDo(carDto);
+        log.info("Saving Car into repository with Id "+ carDO.getId()+" and license plate "+ carDO.getLicensePlate());
         return CarMapper.makeCarDTO(carRepository.save(carDO));
     }
+
     @Override
-    public CarDO selectCar(Long driverId, Long carId) throws CarAlreadyInUseException,DriverNotFound,CarNotFoundException {
-        DriverDO currentDriver = driverRepository.findById(driverId).
-                orElseThrow(()->new DriverNotFound("No Driver Found With ID"+driverId));
-        CarDO selectedCar = carRepository.findById(carId).
-                orElseThrow(()->new CarNotFoundException("No Car Found With ID"+carId));
-        log.info("Booking car "+selectedCar.getId()+"for driver "+currentDriver.getId());
-        return toggleCarBook(currentDriver,selectedCar);
+    public CarDTO updateCar(Long carId, CarDTO carDTO) {
+        CarDO carDO = carRepository.findById(carId).orElseThrow(()->new CarNotFoundException("No Car Found to update with ID"+carId));
+        CarDO newCarDO = CarMapper.makeCarDo(carDTO);
+        newCarDO.setId(carDO.getId());
+        return CarMapper.makeCarDTO(carRepository.save(newCarDO));
     }
 
 
     @Override
-    public CarDO deSelectCar(Long driverId, Long carId) throws DriverNotFound, CarNotFoundException {
+    public void deleteCar(Long carId) {
+        carRepository.deleteById(carId);
+        log.info(" Car "+carId+" has been deleted ");
+    }
+
+
+    @Override
+    public CarDTO selectCar(Long driverId, Long carId) throws CarAlreadyInUseException,DriverNotFound,CarNotFoundException {
         DriverDO currentDriver = driverRepository.findById(driverId).
                 orElseThrow(()->new DriverNotFound("No Driver Found With ID"+driverId));
         CarDO selectedCar = carRepository.findById(carId).
                 orElseThrow(()->new CarNotFoundException("No Car Found With ID"+carId));
-        return toggleCarBook(currentDriver,selectedCar);
+
+        if(selectedCar.getIsAvaliable()){
+            log.info("Booking car "+selectedCar.getId()+"for driver "+currentDriver.getId());
+            return CarMapper.makeCarDTO(bookingService.bookCar(currentDriver,selectedCar));
+        }
+        throw new CarAlreadyInUseException("Car "+selectedCar.getId()+" is already booked");
+    }
+
+
+
+    @Override
+    public CarDTO deSelectCar(Long driverId, Long carId) throws DriverNotFound, CarNotFoundException {
+        DriverDO currentDriver = driverRepository.findById(driverId).
+                orElseThrow(()->new DriverNotFound("No Driver Found With ID"+driverId));
+        CarDO selectedCar = carRepository.findById(carId).
+                orElseThrow(()->new CarNotFoundException("No Car Found With ID"+carId));
+        log.info(" Suspending car "+selectedCar.getId()+"for driver "+currentDriver.getId());
+        return CarMapper.makeCarDTO(bookingService.unBookCar(currentDriver,selectedCar));
     }
 
     @Override
@@ -62,48 +93,6 @@ public class CarServiceImpl implements CarService{
         return carRepository.findAll();
     }
 
-    @Override
-    public CarDO updateCar(Long carId, CarDO newCarDo) {
-        Optional<CarDO> carDO = carRepository.findById(carId);
-        if(carDO.isPresent()){
-            CarDO oldCarDo = carDO.get();
-            newCarDo.setId(oldCarDo.getId());
-            carRepository.save(newCarDo);
-            log.info("A car "+ carId+" details has been updated");
-            return newCarDo;
-        }
-        log.info("No car found with ID "+carId);
-        return null;
-    }
 
-
-    @Override
-    public void deleteCar(Long carId) {
-         carRepository.deleteById(carId);
-        log.info(" Car "+carId+" has been deleted ");
-    }
-
-    private CarDO toggleCarBook(DriverDO currentDriver,CarDO selectedCar){
-        if(currentDriver.getCarId().equals(null)){
-            return bookCar(currentDriver,selectedCar);
-        }
-        return unBookcar(currentDriver,selectedCar);
-    }
-
-    private CarDO bookCar(DriverDO currentDriver,CarDO selectedCar){
-        selectedCar.setBookedBy(currentDriver.getId());
-        selectedCar.setIsAvaliable(false);
-        currentDriver.setCarSelected(true);
-        currentDriver.setCarId(selectedCar.getId());
-        log.info(" Driver with ID " + currentDriver.getId() + " has booked car with Id" + selectedCar.getId());
-        return selectedCar;
-    }
-    private CarDO unBookcar(DriverDO currentDriver,CarDO selectedCar){
-        selectedCar.setBookedBy(currentDriver.getId());
-        selectedCar.setIsAvaliable(true);
-        currentDriver.setCarSelected(false);
-        currentDriver.setCarId(NONE);
-        log.info(" Driver with ID " + currentDriver.getId() + " has booked car with Id" + selectedCar.getId());
-        return selectedCar;
-    }
+ //end of Car Service Class
 }

@@ -46,17 +46,17 @@ public class DriverDO
     private Boolean deleted = false;
 
     @Column(nullable = false,name = "car_selected")
-    private boolean carSelected = false;
+    private boolean isCarSelected = false;
 
     @Column(nullable = false,name = "CAR_ID")
     private Long carId = NONE;
 
     public boolean isCarSelected() {
-        return carSelected;
+        return isCarSelected;
     }
 
     public void setCarSelected(boolean carSelected) {
-        this.carSelected = carSelected;
+        this.isCarSelected = isCarSelected;
     }
 
     public Long getCarId() {
@@ -93,7 +93,7 @@ public class DriverDO
         this.dateCoordinateUpdated = null;
         this.onlineStatus = OnlineStatus.OFFLINE;
         this.carId = NONE;
-        this.carSelected = false;
+        this.isCarSelected = false;
     }
 
 

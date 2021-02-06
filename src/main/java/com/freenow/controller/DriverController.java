@@ -11,6 +11,8 @@ import com.freenow.service.Car.CarService;
 import com.freenow.service.driver.DriverService;
 import java.util.List;
 import javax.validation.Valid;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  * All operations with a driver will be routed by this controller.
  * <p/>
  */
+@Slf4j
 @RestController
 @RequestMapping("v1/drivers")
 public class DriverController
@@ -91,10 +94,12 @@ public class DriverController
 
     @GetMapping("/select/{carId}/{driverId}")
     public CarDTO selectCarById(@PathVariable Long driverId,Long carId) throws CarAlreadyInUseException, CarNotFoundException, DriverNotFound {
-            return CarMapper.makeCarDTO(carService.selectCar(driverId,carId));
+        log.info(" driver "+driverId+" requested to book car "+carId);
+        return carService.selectCar(driverId,carId);
     }
     @GetMapping("/deselect/{carId}/{driverId}")
-    public CarDTO deSelectCarById(@PathVariable Long driverId,Long carId) throws CarAlreadyInUseException, CarNotFoundException, DriverNotFound {
-        return CarMapper.makeCarDTO(carService.selectCar(driverId,carId));
+    public CarDTO deSelectCarById(@PathVariable Long driverId,Long carId) throws  CarNotFoundException, DriverNotFound {
+        log.info(" driver "+driverId+" requested to unbook car "+carId);
+        return carService.deSelectCar(driverId,carId);
     }
 }

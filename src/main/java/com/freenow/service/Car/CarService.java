@@ -13,18 +13,13 @@ import java.util.List;
 public interface   CarService {
 
     CarDTO processCarCreateRequest(CarDTO carDTO);
-    CarDO updateCar(Long carId, CarDO carDto);
-
-
-    void deleteCar(Long carId);
-
-    CarDO getCarById(Long carId) throws CarNotFoundException;
-
-
-    CarDO selectCar(Long driverId, Long carId) throws CarAlreadyInUseException, DriverNotFound, CarNotFoundException;
-
-    CarDO deSelectCar(Long driverId, Long carId) throws DriverNotFound, CarNotFoundException;
-
     List<CarDO> getAllCars();
+    CarDTO updateCar(Long carId, CarDTO carDTO) throws CarNotFoundException;
+    void deleteCar(Long carId) throws CarNotFoundException;
+    CarDTO getCar(Long carId) throws CarNotFoundException;
+
+    CarDTO selectCar(Long driverId, Long carId) throws CarAlreadyInUseException, DriverNotFound, CarNotFoundException;
+    CarDTO deSelectCar(Long driverId, Long carId) throws DriverNotFound, CarNotFoundException;
+
 
 }

@@ -1,19 +1,14 @@
 package com.freenow.controller;
 
-import com.freenow.controller.mapper.CarMapper;
 import com.freenow.datatransferobject.CarDTO;
 import com.freenow.domainobject.CarDO;
-import com.freenow.exception.CarNotFoundException;
-import com.freenow.exception.EntityNotFoundException;
 import com.freenow.service.Car.CarService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -32,6 +27,14 @@ public class CarController {
         log.info("Request for health check endpoint ");
         return "KEEP_ALIVE_OK";
     }
+
+    @GetMapping("/getCar/{carId}")
+    public ResponseEntity<CarDTO> getCar(@PathVariable(value ="carId" ) Long carId){
+        log.info("Requesting car "+carId);
+        CarDTO carDTO = carService.getCar(carId);
+        return new ResponseEntity<>(carDTO, HttpStatus.OK);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<CarDTO> addCar(@Valid @RequestBody CarDTO carDto){
         log.info("Request to add  a new car with license plate "+carDto.getLicensePlate());
@@ -39,27 +42,23 @@ public class CarController {
         return new ResponseEntity<>(carDTO, HttpStatus.CREATED);
     }
 
-
-    @PostMapping("/updatecar/{carId}")
-    public CarDTO updateCar(@PathVariable Long carId,@Valid @RequestBody CarDTO carDto){
-        log.info("Request for updating car details with number plate "+carDto.getLicensePlate());
-        CarDO carDO = CarMapper.makeCarDo(carDto);
-        return CarMapper.makeCarDTO(carService.updateCar(carId,carDO));
-    }
-
-    @GetMapping("/getCar/{carId}")
-    public CarDTO getCar(@PathVariable(value ="carId" ) Long carId) throws CarNotFoundException {
-        log.info("Requesting car "+carId);
-        return CarMapper.makeCarDTO(carService.getCarById(carId));
-    }
-
     @DeleteMapping("/delete/{carId}")
-    public void  deleteCar(@PathVariable(value ="carId" ) Long carId){
+    public void deleteCar(@PathVariable(value ="carId" ) Long carId){
         log.info("Requesting to delete car "+ carId);
         carService.deleteCar(carId);
     }
 
-    @GetMapping
+
+    @PutMapping("/update/{carId}")
+    public ResponseEntity<CarDTO> updateCar(@PathVariable Long carId,@Valid @RequestBody CarDTO carDto){
+        log.info("Request for updating car details with number plate "+carDto.getLicensePlate());
+        CarDTO carDTO = carService.updateCar(carId,carDto);
+        return new ResponseEntity<>(carDTO, HttpStatus.ACCEPTED);
+    }
+
+
+
+    @GetMapping("/getAll")
     public List<CarDO> getAllCars(){
        log.info("Requesting all cars ");
        return carService.getAllCars();

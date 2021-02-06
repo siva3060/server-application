@@ -34,7 +34,7 @@ public class RestExceptionHandling extends ResponseEntityExceptionHandler {
             errorList.add(objectError.getDefaultMessage());
         }
         log.info(" Error Parsing JSON Request body -> Error :"+ errorList);
-        return new ResponseEntity<>(errorList,HttpStatus.OK);
+        return new ResponseEntity<>(errorList,HttpStatus.BAD_REQUEST);
     }
 
     /*
