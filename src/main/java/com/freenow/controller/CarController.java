@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
@@ -24,24 +25,20 @@ public class CarController {
     @Autowired
     CarService carService;
 
+
+
     @GetMapping("/healthcheck")
     public String healthCheck(){
-        log.info("Request for endpoint /healthcheck");
+        log.info("Request for health check endpoint ");
         return "KEEP_ALIVE_OK";
     }
-
-    //curl http://localhost:8080/v1/cars/create -d '{ "id" : 2, "licensePlate" : "AU34AD2", "seatCount" : 4,"isConvertiable" : true, "rating": 4.5, "manufacturer" : { "make" : "KIA", "model" : "Optioma"} '
-    @PostMapping("/addcar")
-    public ResponseEntity<CarDTO> addCar(@Valid @RequestBody CarDTO carDto)  {
-        log.info("Request for  a new car with license plate "+carDto.getLicensePlate());
-        CarDO carDO = CarMapper.makeCarDo(carDto);
-        return new ResponseEntity<>(CarMapper.makeCarDTO(carService.saveCar(carDO)), HttpStatus.CREATED);
+    @PostMapping("/create")
+    public ResponseEntity<CarDTO> addCar(@Valid @RequestBody CarDTO carDto){
+        log.info("Request to add  a new car with license plate "+carDto.getLicensePlate());
+        CarDTO carDTO = carService.processCarCreateRequest(carDto);
+        return new ResponseEntity<>(carDTO, HttpStatus.CREATED);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public void handleConstrainVoildationException(){
-
-    }
 
     @PostMapping("/updatecar/{carId}")
     public CarDTO updateCar(@PathVariable Long carId,@Valid @RequestBody CarDTO carDto){
@@ -67,4 +64,5 @@ public class CarController {
        log.info("Requesting all cars ");
        return carService.getAllCars();
     }
+
 }

@@ -28,13 +28,14 @@ public class CarDTO {
     @Range(min = 2,max=8,message = "seat count should be in the range 2 - 10")
     private int seatCount;
 
+    @NotNull(message = "Car should be convertible ")
     private Boolean isConvertible = false;
 
     @NotNull
     @DecimalMax(value = "5.0",message = "rating cannot be more that 5.0")
     private double rating;
 
-    @NotNull
+    @NotNull(message = "Engine Should be ELECTRIC / GAS / HYBRID")
     private EngineType engineType;
 
     @NotNull(message = "Manufacture data can not be null!")

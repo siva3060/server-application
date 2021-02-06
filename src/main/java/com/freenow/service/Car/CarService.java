@@ -1,5 +1,6 @@
 package com.freenow.service.Car;
 
+import com.freenow.datatransferobject.CarDTO;
 import com.freenow.datatransferobject.DriverDTO;
 import com.freenow.domainobject.CarDO;
 import com.freenow.exception.CarAlreadyInUseException;
@@ -11,8 +12,7 @@ import java.util.List;
 
 public interface   CarService {
 
-    CarDO saveCar(CarDO carDo);
-
+    CarDTO processCarCreateRequest(CarDTO carDTO);
     CarDO updateCar(Long carId, CarDO carDto);
 
 
@@ -23,7 +23,7 @@ public interface   CarService {
 
     CarDO selectCar(Long driverId, Long carId) throws CarAlreadyInUseException, DriverNotFound, CarNotFoundException;
 
-    CarDO deSelectCar(Long driverId, Long carId);
+    CarDO deSelectCar(Long driverId, Long carId) throws DriverNotFound, CarNotFoundException;
 
     List<CarDO> getAllCars();
 
