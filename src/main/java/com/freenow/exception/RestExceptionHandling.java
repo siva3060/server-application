@@ -37,17 +37,6 @@ public class RestExceptionHandling extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorList,HttpStatus.BAD_REQUEST);
     }
 
-    /*
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
-        List<String> errorList = new ArrayList<>();
-       BindingResult bindingResult = ex.getBindingResult();
-       for( ObjectError objectError : bindingResult.getAllErrors()){
-            errorList.add(objectError.getDefaultMessage());
-       }
-       log.info(" Error Parsing JSON Request body -> Error :"+ errorList);
-        return new ResponseEntity<>(errorList,HttpStatus.BAD_REQUEST);
-    }*/
 
     @ExceptionHandler(CarNotFoundException.class)
     public ResponseEntity<String> handleCarNotFoundException(CarNotFoundException e){
@@ -61,6 +50,12 @@ public class RestExceptionHandling extends ResponseEntityExceptionHandler {
         log.info("Driver Not Found Exception is handled ");
         return new ResponseEntity<>(errMsg,HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(DriverOfflineException.class)
+    public ResponseEntity<String> handleDriverOffLineException(DriverOfflineException e){
+        String errMsg = e.getMessage();
+        log.info("Driver is offline so can not process the request ");
+        return new ResponseEntity<>(errMsg,HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handleConstraintsViolationException(ConstraintViolationException ex){
@@ -69,14 +64,5 @@ public class RestExceptionHandling extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errMsg,HttpStatus.NOT_FOUND);
     }
 
-/*
 
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        Object o = new Object();
-        String errMsg = ex.getMessage();
-        log.info("Handling Constraint Violation Exception");
-        return new ResponseEntity<>(o,HttpStatus.CREATED);
-    }
-*/
 }

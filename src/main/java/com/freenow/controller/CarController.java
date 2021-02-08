@@ -28,7 +28,7 @@ public class CarController {
         return "KEEP_ALIVE_OK";
     }
 
-    @GetMapping("/getCar/{carId}")
+    @GetMapping("/find/{carId}")
     public ResponseEntity<CarDTO> getCar(@PathVariable(value ="carId" ) Long carId){
         log.info("Requesting car "+carId);
         CarDTO carDTO = carService.getCar(carId);
@@ -49,7 +49,7 @@ public class CarController {
     }
 
 
-    @PutMapping("/update/{carId}")
+    @PostMapping("/update/{carId}")
     public ResponseEntity<CarDTO> updateCar(@PathVariable Long carId,@Valid @RequestBody CarDTO carDto){
         log.info("Request for updating car details with number plate "+carDto.getLicensePlate());
         CarDTO carDTO = carService.updateCar(carId,carDto);

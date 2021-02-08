@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Car has been already booked")
-public class CarAlreadyInUseException extends Exception{
+public class CarAlreadyInUseException extends RuntimeException{
 
     public CarAlreadyInUseException(String message){
         super(message);

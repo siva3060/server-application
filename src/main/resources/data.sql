@@ -20,7 +20,7 @@ insert into driver (id, date_created, deleted, online_status, password, username
 'driver04pw', 'driver04', false, 0);
 
 insert into driver (id, date_created, deleted, online_status, password, username, car_selected,car_id) values (5, now(), false, 'ONLINE',
-'driver05pw', 'driver05', false, 0);
+'driver05pw', 'driver05', true, 5);
 
 insert into driver (id, date_created, deleted, online_status, password, username, car_selected,car_id) values (6, now(), false, 'ONLINE',
 'driver06pw', 'driver06', false, 0);
@@ -48,3 +48,7 @@ insert into car (id, date_created, license_plate, seat_count, is_convertible, ra
 values (2, now(), 'AP01E23', 2, true, 4.5,'HYBRID','FORD','e-pickup', true,0);
 insert into car (id, date_created, license_plate, seat_count, is_convertible, rating, engine_type, make, model, is_avaliable, booked_by)
 values (3, now(), 'KL01D898', 8, false, 3.2,'GAS','Honda','Accord', true,0);
+
+-- Create 1 Car Which is Booked
+insert into car (id, date_created, license_plate, seat_count, is_convertible, rating, engine_type, make, model, is_avaliable, booked_by)
+values (5, now(), 'AP39ADG', 8, false, 3.2,'GAS','Merc','CD550', false,5);

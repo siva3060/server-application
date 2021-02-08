@@ -6,9 +6,11 @@ import com.freenow.dataaccessobject.DriverRepository;
 import com.freenow.datatransferobject.CarDTO;
 import com.freenow.domainobject.CarDO;
 import com.freenow.domainobject.DriverDO;
+import com.freenow.domainvalue.OnlineStatus;
 import com.freenow.exception.CarAlreadyInUseException;
 import com.freenow.exception.CarNotFoundException;
 import com.freenow.exception.DriverNotFound;
+import com.freenow.exception.DriverOfflineException;
 import com.freenow.service.booking.BookingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,35 +58,39 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public void deleteCar(Long carId) {
+        carRepository.findById(carId).orElseThrow(()-> new CarNotFoundException("No Car Found with ID to delete"));
+        log.info("Deleting Car with Car ID "+carId);
         carRepository.deleteById(carId);
         log.info(" Car "+carId+" has been deleted ");
     }
 
 
     @Override
-    public CarDTO selectCar(Long driverId, Long carId) throws CarAlreadyInUseException,DriverNotFound,CarNotFoundException {
+    public CarDTO selectCar(Long driverId, Long carId) throws DriverOfflineException,CarNotFoundException,DriverNotFound {
         DriverDO currentDriver = driverRepository.findById(driverId).
                 orElseThrow(()->new DriverNotFound("No Driver Found With ID"+driverId));
         CarDO selectedCar = carRepository.findById(carId).
                 orElseThrow(()->new CarNotFoundException("No Car Found With ID"+carId));
-
-        if(selectedCar.getIsAvaliable()){
+        if(currentDriver.getOnlineStatus().equals(OnlineStatus.ONLINE)){
             log.info("Booking car "+selectedCar.getId()+"for driver "+currentDriver.getId());
             return CarMapper.makeCarDTO(bookingService.bookCar(currentDriver,selectedCar));
         }
-        throw new CarAlreadyInUseException("Car "+selectedCar.getId()+" is already booked");
+        throw new DriverOfflineException("Driver must be online to book the car ");
     }
 
 
 
     @Override
-    public CarDTO deSelectCar(Long driverId, Long carId) throws DriverNotFound, CarNotFoundException {
+    public CarDTO deSelectCar(Long driverId, Long carId) throws CarAlreadyInUseException,CarNotFoundException,DriverNotFound {
         DriverDO currentDriver = driverRepository.findById(driverId).
                 orElseThrow(()->new DriverNotFound("No Driver Found With ID"+driverId));
         CarDO selectedCar = carRepository.findById(carId).
                 orElseThrow(()->new CarNotFoundException("No Car Found With ID"+carId));
-        log.info(" Suspending car "+selectedCar.getId()+"for driver "+currentDriver.getId());
-        return CarMapper.makeCarDTO(bookingService.unBookCar(currentDriver,selectedCar));
+        if(currentDriver.getOnlineStatus().equals(OnlineStatus.ONLINE)){
+            log.info(" Suspending car "+selectedCar.getId()+"for driver "+currentDriver.getId());
+            return CarMapper.makeCarDTO(bookingService.unBookCar(currentDriver,selectedCar));
+        }
+        throw new DriverOfflineException("Driver must be online to book the car ");
     }
 
     @Override

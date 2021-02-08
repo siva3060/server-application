@@ -8,10 +8,7 @@ import com.freenow.domainvalue.Manufacturer;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -21,7 +18,7 @@ public class CarDTO {
     private Long id;
 
     @NotNull(message = "license plate can not be null!")
-    @Size(min=5,max=8,message = "licensePlate should be atlest 5 digits")
+    @Size(min=5,max=8,message = "licensePlate should be atlest 5  and Max 8 characters ")
     private String licensePlate;
 
     @NotNull(message = "seat count  can not be null!")

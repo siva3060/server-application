@@ -19,7 +19,7 @@ public interface   CarService {
     CarDTO getCar(Long carId) throws CarNotFoundException;
 
     CarDTO selectCar(Long driverId, Long carId) throws CarAlreadyInUseException, DriverNotFound, CarNotFoundException;
-    CarDTO deSelectCar(Long driverId, Long carId) throws DriverNotFound, CarNotFoundException;
+    CarDTO deSelectCar(Long driverId, Long carId) throws DriverNotFound, CarNotFoundException, CarAlreadyInUseException;
 
 
 }
