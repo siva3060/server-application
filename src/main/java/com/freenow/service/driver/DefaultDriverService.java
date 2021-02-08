@@ -1,18 +1,23 @@
 package com.freenow.service.driver;
 
 import com.freenow.dataaccessobject.DriverRepository;
+import com.freenow.dataaccessobject.SearchCar;
+import com.freenow.dataaccessobject.SearchDriver;
 import com.freenow.datatransferobject.DriverDTO;
 import com.freenow.domainobject.DriverDO;
 import com.freenow.domainvalue.GeoCoordinate;
 import com.freenow.domainvalue.OnlineStatus;
+import com.freenow.domainvalue.SearchType;
 import com.freenow.exception.ConstraintsViolationException;
 import com.freenow.exception.DriverNotFound;
 import com.freenow.exception.EntityNotFoundException;
 import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Service to encapsulate the link between DAO and controller and to have business logic for some driver specific things.
  * <p/>
  */
+@Slf4j
 @Service
 public class DefaultDriverService implements DriverService
 {
@@ -27,6 +33,10 @@ public class DefaultDriverService implements DriverService
     private static final Logger LOG = LoggerFactory.getLogger(DefaultDriverService.class);
 
     private final DriverRepository driverRepository;
+    SearchCar searchCar;
+
+    @Autowired
+    SearchDriver searchDriver;
 
 
     public DefaultDriverService(final DriverRepository driverRepository)
@@ -34,6 +44,10 @@ public class DefaultDriverService implements DriverService
         this.driverRepository = driverRepository;
     }
 
+    @Autowired
+    public void setSearchCar(SearchCar searchCar) {
+        this.searchCar = searchCar;
+    }
 
     /**
      * Selects a driver by id.
@@ -116,14 +130,18 @@ public class DefaultDriverService implements DriverService
         return driverRepository.findByOnlineStatus(onlineStatus);
     }
 
- // need to implement criteria Queries
-/*
     @Override
-    public List<DriverDO> searchBy(String keyWord, String value) {
-        //return driverRepository.findBy(String value);
-        return null;
+    public List<String>  searchByCriteria(SearchType searchParameter, String searchValue) {
+        log.info("search for driver in service class "+ searchParameter);
+        if(searchParameter.equals(SearchType.USERNAME)){
+            log.info("Searching based on driver paramenter");
+            return searchDriver.search(searchParameter.toString(), searchValue);
+        }
+        log.info("Searching based on car Parameter");
+        return  searchCar.search(searchParameter.toString(), searchValue);
+
     }
-*/
+
 
 
     private DriverDO findDriverChecked(Long driverId) throws DriverNotFound

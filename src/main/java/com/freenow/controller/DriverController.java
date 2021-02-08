@@ -1,11 +1,11 @@
 package com.freenow.controller;
 
-import com.freenow.controller.mapper.CarMapper;
 import com.freenow.controller.mapper.DriverMapper;
 import com.freenow.datatransferobject.CarDTO;
 import com.freenow.datatransferobject.DriverDTO;
 import com.freenow.domainobject.DriverDO;
 import com.freenow.domainvalue.OnlineStatus;
+import com.freenow.domainvalue.SearchType;
 import com.freenow.exception.*;
 import com.freenow.service.Car.CarService;
 import com.freenow.service.driver.DriverService;
@@ -77,14 +77,13 @@ public class DriverController
     {
         driverService.updateLocation(driverId, longitude, latitude);
     }
-/*
 
-    @GetMapping("/searchBy/{keyWord}/{value}")
-    public List<DriverDTO> searchDriverBy(@PathVariable String keyWord,
-                                          @PathVariable String value){
-        return DriverMapper.makeDriverDTOList(driverService.searchBy(keyWord,value));
+    @GetMapping("/searchBy/{searchBy}/{searchValue}")
+    public List<String>  searchDriverBy(@PathVariable("searchBy") SearchType searchBy,
+                                @PathVariable("searchValue") String searchValue){
+        log.info("Searching for driver with "+searchBy+" with search value "+searchValue);
+            return driverService.searchByCriteria(searchBy,searchValue);
     }
-*/
 
     @GetMapping
     public List<DriverDTO> findDrivers(@RequestParam OnlineStatus onlineStatus)

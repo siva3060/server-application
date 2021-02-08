@@ -43,9 +43,9 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public CarDTO processCarCreateRequest(CarDTO carDto) {
-        CarDO carDO = CarMapper.makeCarDo(carDto);
-        log.info("Saving Car into repository with Id "+ carDO.getId()+" and license plate "+ carDO.getLicensePlate());
-        return CarMapper.makeCarDTO(carRepository.save(carDO));
+            CarDO carDO = CarMapper.makeCarDo(carDto);
+            log.info("Saving Car into repository with Id " + carDO.getId() + " and license plate " + carDO.getLicensePlate());
+            return CarMapper.makeCarDTO(carRepository.save(carDO));
     }
 
     @Override

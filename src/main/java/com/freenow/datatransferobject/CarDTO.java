@@ -10,6 +10,8 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.*;
 
+import static com.freenow.domainobject.DriverDO.NONE;
+
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CarDTO {
@@ -38,8 +40,9 @@ public class CarDTO {
     @NotNull(message = "Manufacture data can not be null!")
     private Manufacturer manufacturer;
 
-    private boolean isAvailable;
-    private Long bookedBy;
+    private boolean isAvailable = true;
+
+    private Long bookedBy = NONE;
 
     public boolean getIsAvailable() {
         return isAvailable;
