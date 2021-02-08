@@ -11,6 +11,7 @@ import com.freenow.service.Car.CarService;
 import com.freenow.service.driver.DriverService;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class DriverController
     @GetMapping("/{driverId}")
     public DriverDTO getDriver(@PathVariable long driverId) throws EntityNotFoundException
     {
-        return DriverMapper.makeDriverDTO(driverService.find(driverId));
+        return DriverMapper.makeDriverDTO(driverService.findById(driverId));
     }
 
 
@@ -79,8 +80,8 @@ public class DriverController
     }
 
     @GetMapping("/searchBy/{searchBy}/{searchValue}")
-    public List<String>  searchDriverBy(@PathVariable("searchBy") SearchType searchBy,
-                                @PathVariable("searchValue") String searchValue){
+    public List<DriverDTO>  searchDriverBy(@NotNull  @PathVariable("searchBy") SearchType searchBy,
+                                @NotNull @PathVariable("searchValue") String searchValue){
         log.info("Searching for driver with "+searchBy+" with search value "+searchValue);
             return driverService.searchByCriteria(searchBy,searchValue);
     }
@@ -88,7 +89,7 @@ public class DriverController
     @GetMapping
     public List<DriverDTO> findDrivers(@RequestParam OnlineStatus onlineStatus)
     {
-        return DriverMapper.makeDriverDTOList(driverService.find(onlineStatus));
+        return DriverMapper.makeDriverDTOList(driverService.findByOnlineStatus(onlineStatus));
     }
 
     @GetMapping("/select/{carId}/{driverId}")

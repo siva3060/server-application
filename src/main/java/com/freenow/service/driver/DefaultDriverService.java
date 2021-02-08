@@ -49,6 +49,11 @@ public class DefaultDriverService implements DriverService
         this.searchCar = searchCar;
     }
 
+    @Autowired
+    public void setSearchDriver(SearchDriver searchDriver) {
+        this.searchDriver = searchDriver;
+    }
+
     /**
      * Selects a driver by id.
      *
@@ -57,7 +62,7 @@ public class DefaultDriverService implements DriverService
      * @throws EntityNotFoundException if no driver with the given id was found.
      */
     @Override
-    public DriverDO find(Long driverId) throws EntityNotFoundException
+    public DriverDO findById(Long driverId) throws EntityNotFoundException
     {
         return findDriverChecked(driverId);
     }
@@ -125,16 +130,15 @@ public class DefaultDriverService implements DriverService
      * @param onlineStatus
      */
     @Override
-    public List<DriverDO> find(OnlineStatus onlineStatus)
+    public List<DriverDO> findByOnlineStatus(OnlineStatus onlineStatus)
     {
         return driverRepository.findByOnlineStatus(onlineStatus);
     }
 
     @Override
-    public List<String>  searchByCriteria(SearchType searchParameter, String searchValue) {
-        log.info("search for driver in service class "+ searchParameter);
+    public List<DriverDTO>  searchByCriteria(SearchType searchParameter, String searchValue) {
         if(searchParameter.equals(SearchType.USERNAME)){
-            log.info("Searching based on driver paramenter");
+            log.info("Searching based on driver Parameter");
             return searchDriver.search(searchParameter.toString(), searchValue);
         }
         log.info("Searching based on car Parameter");

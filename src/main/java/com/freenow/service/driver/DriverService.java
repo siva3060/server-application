@@ -11,7 +11,7 @@ import java.util.List;
 public interface DriverService
 {
 
-    DriverDO find(Long driverId) throws EntityNotFoundException;
+    DriverDO findById(Long driverId) throws EntityNotFoundException;
 
     DriverDO create(DriverDO driverDO) throws ConstraintsViolationException;
 
@@ -19,9 +19,9 @@ public interface DriverService
 
     void updateLocation(long driverId, double longitude, double latitude) throws EntityNotFoundException;
 
-    List<DriverDO> find(OnlineStatus onlineStatus);
+    List<DriverDO> findByOnlineStatus(OnlineStatus onlineStatus);
 
-    List<String>  searchByCriteria(SearchType keyWord, String value);
+    List<DriverDTO>  searchByCriteria(SearchType keyWord, String value);
 
     //List<DriverDO> searchBy(String keyWord,String value);
 }
