@@ -15,6 +15,7 @@ import com.freenow.service.booking.BookingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
+    @Transactional
     public CarDTO updateCar(Long carId, CarDTO carDTO) {
         CarDO carDO = carRepository.findById(carId).orElseThrow(()->new CarNotFoundException("No Car Found to update with ID"+carId));
         CarDO newCarDO = CarMapper.makeCarDo(carDTO);
@@ -57,6 +59,7 @@ public class CarServiceImpl implements CarService{
 
 
     @Override
+    @Transactional
     public void deleteCar(Long carId) {
         carRepository.findById(carId).orElseThrow(()-> new CarNotFoundException("No Car Found with ID to delete"));
         log.info("Deleting Car with Car ID "+carId);
@@ -66,13 +69,14 @@ public class CarServiceImpl implements CarService{
 
 
     @Override
+    @Transactional
     public CarDTO selectCar(Long driverId, Long carId) throws DriverOfflineException,CarNotFoundException,DriverNotFound {
         DriverDO currentDriver = driverRepository.findById(driverId).
                 orElseThrow(()->new DriverNotFound("No Driver Found With ID"+driverId));
         CarDO selectedCar = carRepository.findById(carId).
                 orElseThrow(()->new CarNotFoundException("No Car Found With ID"+carId));
         if(currentDriver.getOnlineStatus().equals(OnlineStatus.ONLINE)){
-            log.info("Booking car "+selectedCar.getId()+"for driver "+currentDriver.getId());
+            log.info("Booking car "+selectedCar.getId()+" for driver "+currentDriver.getId());
             return CarMapper.makeCarDTO(bookingService.bookCar(currentDriver,selectedCar));
         }
         throw new DriverOfflineException("Driver must be online to book the car ");
@@ -81,6 +85,7 @@ public class CarServiceImpl implements CarService{
 
 
     @Override
+    @Transactional
     public CarDTO deSelectCar(Long driverId, Long carId) throws CarAlreadyInUseException,CarNotFoundException,DriverNotFound {
         DriverDO currentDriver = driverRepository.findById(driverId).
                 orElseThrow(()->new DriverNotFound("No Driver Found With ID"+driverId));

@@ -53,7 +53,7 @@ public class CarDO {
     @Column(nullable = false)
     private Manufacturer manufacturer;
 
-    private boolean isAvaliable = true;
+    private boolean isAvaliable;
     private Long bookedBy;
 
     public CarDO() {
@@ -62,7 +62,7 @@ public class CarDO {
 
     public CarDO( String licensePlate, int seatCount,
                  Boolean isConvertible, double rating,
-                  EngineType engineType, Manufacturer manufacturer) {
+                  EngineType engineType, Manufacturer manufacturer,Boolean isAvaliable,Long bookedBy) {
         this.dateCreated = dateCreated;
         this.licensePlate = licensePlate;
         this.seatCount = seatCount;
@@ -70,8 +70,8 @@ public class CarDO {
         this.rating = rating;
         this.engineType = engineType;
         this.manufacturer = manufacturer;
-        this.isAvaliable = true;
-        this.bookedBy = NONE;
+        this.isAvaliable = isAvaliable;
+        this.bookedBy = bookedBy;
     }
 
     public void setIsAvaliable(boolean b) {

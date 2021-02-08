@@ -37,6 +37,12 @@ public class RestExceptionHandling extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorList,HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(CarAlreadyInUseException.class)
+    public ResponseEntity<String> handleCarAlreadyInUseException(CarAlreadyInUseException e){
+        String errMsg = e.getMessage();
+        log.info("Car Already In use  Exception is handled ");
+        return new ResponseEntity<>(errMsg,HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(CarNotFoundException.class)
     public ResponseEntity<String> handleCarNotFoundException(CarNotFoundException e){
@@ -56,6 +62,7 @@ public class RestExceptionHandling extends ResponseEntityExceptionHandler {
         log.info("Driver is offline so can not process the request ");
         return new ResponseEntity<>(errMsg,HttpStatus.BAD_REQUEST);
     }
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handleConstraintsViolationException(ConstraintViolationException ex){

@@ -15,18 +15,24 @@ public class CarMapper
                       carDTO.getIsConvertible(),
                       carDTO.getRating(),
                       carDTO.getEngineType(),
-                      carDTO.getManufacturer());
+                      carDTO.getManufacturer(),
+                      carDTO.getIsAvailable(),
+                      carDTO.getBookedBy());
         }
 
         public static CarDTO makeCarDTO(CarDO carDO){
             log.info("Transforming car DO -> car DTO for car license plate "+ carDO.getLicensePlate());
+            System.out.println("Printing car Do ");
+            System.out.println(carDO.toString());
                 return new CarDTO(carDO.getId(),
                         carDO.getLicensePlate(),
                         carDO.getSeatCount(),
                         carDO.getIsConvertible(),
                         carDO.getRating(),
                         carDO.getEngineType(),
-                        carDO.getManufacturer());
+                        carDO.getManufacturer(),
+                        carDO.getIsAvaliable(),
+                        carDO.getBookedBy());
         }
 
 }

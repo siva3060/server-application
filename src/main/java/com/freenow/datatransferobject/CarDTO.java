@@ -38,6 +38,16 @@ public class CarDTO {
     @NotNull(message = "Manufacture data can not be null!")
     private Manufacturer manufacturer;
 
+    private boolean isAvailable;
+    private Long bookedBy;
+
+    public boolean getIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(boolean available) {
+        isAvailable = available;
+    }
 
     @JsonProperty
     public Long getId()
@@ -58,9 +68,9 @@ public class CarDTO {
     {
     }
 
-    public CarDTO(Long id,String licensePlate, int seatCount,
+    public CarDTO(Long id, String licensePlate, int seatCount,
                   Boolean isConvertible, double rating,
-                  EngineType engineType, Manufacturer manufacturer) {
+                  EngineType engineType, Manufacturer manufacturer, Boolean isAvailable, Long bookedBy) {
         this.id = id;
         this.licensePlate = licensePlate;
         this.seatCount = seatCount;
@@ -68,6 +78,8 @@ public class CarDTO {
         this.rating = rating;
         this.engineType = engineType;
         this.manufacturer = manufacturer;
+        this.isAvailable = isAvailable;
+        this.bookedBy = bookedBy;
     }
 
     public static class CarDTOBuilder{
@@ -79,6 +91,8 @@ public class CarDTO {
         private double rating;
         private EngineType engineType;
         private Manufacturer manufacturer;
+        private Boolean isAvaliable;
+        private Long bookedBy;
 
         public CarDTOBuilder getId() {
             this.id = id;
@@ -116,7 +130,7 @@ public class CarDTO {
         }
         public CarDTO createCarDTO()
         {
-            return new CarDTO(id,licensePlate,seatCount,isConvertible,rating,engineType,manufacturer);
+            return new CarDTO(id,licensePlate,seatCount,isConvertible,rating,engineType,manufacturer,isAvaliable,bookedBy);
         }
     }
 }
