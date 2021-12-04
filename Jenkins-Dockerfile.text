@@ -1,0 +1,5 @@
+FROM openjdk:8-jdk-alpine
+MAINTAINER baeldung.com
+COPY target/freenow_server_applicant_test-1.0.0-SNAPSHOT.jar freenow_server_applicant_test-1.0.0-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","freenow_server_applicant_test-1.0.0-SNAPSHOT.jar"]
+                
